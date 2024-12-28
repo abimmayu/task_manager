@@ -120,9 +120,10 @@ bloc: ^8.1.4
 flutter_bloc: ^8.1.6
 ```
 
-2. **SQFLite: Local data storage
+2. **SQFLite**: Local data storage
 ```yaml
-sqflite: ^2.4.1 ```
+sqflite: ^2.4.1
+```
 
 3. **Flutter ScreenUtil**: UI adjustment for different screen sizes.
 
