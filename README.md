@@ -99,7 +99,7 @@ This application uses the **Clean Architecture** approach combined with **Bloc (
 
 - Unit tests for:
 - Login form validation.
-- Task status manipulation.
+- Bloc functionality
 
 ### **Dependency Injection**
 
