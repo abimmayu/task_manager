@@ -9,7 +9,7 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthUsecase authUsecase;
 
-  final SecureStorage storage = SecureStorage();
+  SecureStorage storage = SecureStorage();
 
   AuthBloc(
     this.authUsecase,
@@ -41,13 +41,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (l) => emit(
         AuthFailed(l.message!),
       ),
-      (r) {
-        storage.write("token", r.token);
+      (r) async {
         emit(
           AuthDone(
             token: r.token,
           ),
         );
+        await storage.write("token", r.token);
       },
     );
   }
