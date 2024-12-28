@@ -7,6 +7,7 @@ class AppTextStyle {
   static final _fontFamily = GoogleFonts.roboto().fontFamily;
 
   static TextStyle _baseStyle({
+    required BuildContext context,
     FontWeight fontWeight = FontWeight.w400,
     double fontSize = 14,
   }) {
@@ -14,29 +15,35 @@ class AppTextStyle {
       fontFamily: _fontFamily,
       fontWeight: fontWeight,
       fontSize: fontSize,
-      color: AppColor.primaryTextColor,
+      color:
+          Theme.of(context).textTheme.bodyLarge?.color ?? AppColor.primaryColor,
     );
   }
 
-  static final title = _baseStyle(
-    fontWeight: FontWeight.w700,
-    fontSize: 48.sp,
-  );
+  static TextStyle title(BuildContext context) => _baseStyle(
+        context: context,
+        fontWeight: FontWeight.w700,
+        fontSize: 48.sp,
+      );
 
-  static final body = _baseStyle(
-    fontSize: 24.sp,
-  );
+  static TextStyle body(BuildContext context) => _baseStyle(
+        context: context,
+        fontSize: 24.sp,
+      );
 
-  static final tinyText = _baseStyle(
-    fontSize: 20.sp,
-  );
+  static TextStyle tinyText(BuildContext context) => _baseStyle(
+        context: context,
+        fontSize: 20.sp,
+      );
 
-  static final subtitle = _baseStyle(
-    fontWeight: FontWeight.w500,
-    fontSize: 42.sp,
-  );
+  static TextStyle subtitle(BuildContext context) => _baseStyle(
+        context: context,
+        fontWeight: FontWeight.w500,
+        fontSize: 42.sp,
+      );
 
-  static final description = _baseStyle(
-    fontSize: 24.sp,
-  );
+  static TextStyle description(BuildContext context) => _baseStyle(
+        context: context,
+        fontSize: 24.sp,
+      );
 }

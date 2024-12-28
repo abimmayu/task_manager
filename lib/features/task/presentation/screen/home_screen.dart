@@ -198,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Flexible(
                 child: Text(
                   "Abim Mayu Indra Ardiansah",
-                  style: AppTextStyle.title,
+                  style: AppTextStyle.title(context),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.end,
@@ -210,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Flexible(
                 child: Text(
                   "Mobile Developer",
-                  style: AppTextStyle.title.copyWith(
+                  style: AppTextStyle.title(context).copyWith(
                     fontWeight: FontWeight.w400,
                   ),
                   maxLines: 2,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/features/task/presentation/bloc/theme/theme_bloc.dart';
+import 'package:task_manager/features/task/presentation/screen/widget/bottom_nav_bar.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -23,6 +24,9 @@ class SettingScreen extends StatelessWidget {
             );
           },
         ),
+      ),
+      bottomNavigationBar: const BottomNavBar(
+        selectedIndex: 2,
       ),
     );
   }

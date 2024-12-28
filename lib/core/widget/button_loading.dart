@@ -20,7 +20,11 @@ class ButtonLoading extends StatelessWidget {
         child: Center(
           child: Text(
             '',
-            style: AppTextStyle.title.copyWith(color: AppColor.backgroundColor),
+            style: AppTextStyle.title(
+              context,
+            ).copyWith(
+              color: AppColor.backgroundColor,
+            ),
           ),
         ),
       ),

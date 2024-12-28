@@ -47,7 +47,7 @@ class TaskCard extends StatelessWidget {
                     width: 300.w,
                     child: Text(
                       title,
-                      style: AppTextStyle.title.copyWith(
+                      style: AppTextStyle.title(context).copyWith(
                         color: AppColor.backgroundColor,
                       ),
                       maxLines: 2,
@@ -59,7 +59,7 @@ class TaskCard extends StatelessWidget {
                   width: 200.w,
                   child: Text(
                     dueDate,
-                    style: AppTextStyle.subtitle.copyWith(
+                    style: AppTextStyle.subtitle(context).copyWith(
                       color: AppColor.backgroundColor,
                     ),
                     maxLines: 2,
@@ -74,7 +74,7 @@ class TaskCard extends StatelessWidget {
               children: [
                 Text(
                   status,
-                  style: AppTextStyle.subtitle.copyWith(
+                  style: AppTextStyle.subtitle(context).copyWith(
                     color: AppColor.backgroundColor,
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/features/auth/data/datasource/auth_data_source.dart';
 import 'package:task_manager/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:task_manager/features/auth/domain/repository/auth_repository.dart';
@@ -19,9 +20,16 @@ import 'package:task_manager/features/task/presentation/bloc/theme/theme_bloc.da
 final GetIt sl = GetIt.instance;
 
 init() async {
+  await _localStorage();
   await _auth();
   await _tasks();
   await _theme();
+}
+
+Future<void> _localStorage() async {
+  // Shared Preferences
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
 }
 
 Future<void> _auth() async {

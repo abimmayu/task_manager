@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_manager/core/widget/button.dart';
 import 'package:task_manager/features/task/data/models/task_model.dart';
 import 'package:task_manager/features/task/presentation/bloc/task/task_bloc.dart';
-import 'package:task_manager/features/task/presentation/screen/widget/bottom_nav_bar.dart';
 import 'package:task_manager/features/task/presentation/screen/widget/dropdown_due_date.dart';
 import 'package:task_manager/features/task/presentation/screen/widget/dropdown_filter_task.dart';
 import 'package:task_manager/features/task/presentation/screen/widget/text_form_create_task.dart';
@@ -48,7 +47,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Task'),
+        title: const Text('Edit Task'),
         centerTitle: true,
       ),
       body: ListView(
@@ -151,7 +150,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           }),
         ],
       ),
-      bottomNavigationBar: const BottomNavBar(selectedIndex: 1),
     );
   }
 }

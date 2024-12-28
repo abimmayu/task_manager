@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:task_manager/core/theme/app_thene.dart';
+import 'package:task_manager/features/task/presentation/bloc/theme/theme_bloc.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_manager/core/route/route.dart';
@@ -10,9 +12,9 @@ import 'package:task_manager/features/auth/presentation/bloc/splash/splash_bloc.
 import 'package:task_manager/features/task/presentation/bloc/task/task_bloc.dart';
 
 void main() async {
-  await di.init();
-
   WidgetsFlutterBinding.ensureInitialized();
+
+  await di.init();
 
   tz.initializeTimeZones();
 
@@ -47,13 +49,21 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (_) => di.sl<TaskBloc>(),
             ),
+            BlocProvider(
+              create: (_) => di.sl<ThemeCubit>(),
+            ),
           ],
-          child: MaterialApp.router(
-            routerDelegate: router.routerDelegate,
-            routeInformationParser: router.routeInformationParser,
-            routeInformationProvider: router.routeInformationProvider,
-            debugShowCheckedModeBanner: false,
-            title: 'Task Manager',
+          child: BlocBuilder<ThemeCubit, bool>(
+            builder: (context, isDarkMode) {
+              return MaterialApp.router(
+                routerDelegate: router.routerDelegate,
+                routeInformationParser: router.routeInformationParser,
+                routeInformationProvider: router.routeInformationProvider,
+                debugShowCheckedModeBanner: false,
+                theme: isDarkMode ? darkTheme : lightTheme,
+                title: 'Task Manager',
+              );
+            },
           ),
         );
       },
