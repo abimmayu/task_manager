@@ -222,7 +222,6 @@ dartz: ^0.10.1
 1. **Push Notification**:
 
 - Remind users about tasks approaching Due Date.
-- Use Firebase Cloud Messaging (FCM).
 
 2. **Dark Mode / Light Mode**:
 
