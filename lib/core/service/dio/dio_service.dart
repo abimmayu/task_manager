@@ -1,16 +1,30 @@
+import 'dart:developer' as dev;
+
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 
-Future<Response> postIt(String url, {Map<String, dynamic>? headers}) async {
-  Logger().i(url);
-  final response = await Dio().post(
+// Singleton Dio instance
+final Dio _dio = Dio(BaseOptions(
+  connectTimeout: const Duration(seconds: 10),
+  receiveTimeout: const Duration(seconds: 10),
+));
+
+Future<Response> postIt(
+  String url, {
+  Map<String, dynamic>? body,
+  Map<String, dynamic>? headers,
+}) async {
+  Logger().i("URL: $url");
+  Logger().i(body);
+
+  final response = await _dio.post(
     url,
+    data: body,
     options: Options(
+      validateStatus: (status) => status! < 500,
       headers: headers,
-      receiveTimeout: const Duration(milliseconds: 5000),
-      sendTimeout: const Duration(milliseconds: 6000),
     ),
   );
-  Logger().d(response.data);
+  Logger().d("Response data: ${response.data}");
   return response;
 }

@@ -21,7 +21,13 @@ class AuthRepositoryImpl extends AuthRepository {
       );
     } on DioException catch (e) {
       return Left(
-        AuthError(message: e.message),
+        AuthError(
+          message: e.message,
+        ),
+      );
+    } catch (e) {
+      return Left(
+        AuthError(message: e.toString()),
       );
     }
   }
@@ -41,6 +47,10 @@ class AuthRepositoryImpl extends AuthRepository {
         AuthError(
           message: e.message,
         ),
+      );
+    } catch (e) {
+      return Left(
+        AuthError(message: e.toString()),
       );
     }
   }

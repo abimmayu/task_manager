@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_manager/core/route/route.dart';
 import 'package:task_manager/core/utils/depedency_injection.dart' as di;
 import 'package:task_manager/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:task_manager/features/auth/presentation/bloc/splash/splash_bloc.dart';
+import 'package:task_manager/features/task/presentation/bloc/task_bloc.dart';
 
 void main() async {
   await di.init();
@@ -26,6 +28,12 @@ class MyApp extends StatelessWidget {
           providers: [
             BlocProvider(
               create: (_) => di.sl<AuthBloc>(),
+            ),
+            BlocProvider(
+              create: (_) => di.sl<SplashBloc>(),
+            ),
+            BlocProvider(
+              create: (_) => di.sl<TaskBloc>(),
             ),
           ],
           child: MaterialApp.router(

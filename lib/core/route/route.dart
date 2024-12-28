@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:task_manager/features/auth/presentation/screen/login_screen.dart';
 import 'package:task_manager/features/auth/presentation/screen/register_screen.dart';
 import 'package:task_manager/features/auth/presentation/screen/splash_screen.dart';
+import 'package:task_manager/features/task/presentation/screen/home_screen.dart';
 
 enum AppRoute {
   splashScreen,
@@ -42,7 +43,7 @@ final GoRouter router = GoRouter(
             path: '/home',
             name: AppRoute.homeScreen.name,
             builder: (context, state) {
-              return const Placeholder();
+              return HomeScreen();
             },
             routes: [
               GoRoute(

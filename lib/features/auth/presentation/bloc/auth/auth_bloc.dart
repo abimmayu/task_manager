@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_manager/core/service/local_storage/secure_storage.dart';
 import 'package:task_manager/features/auth/domain/usecases/auth_usecases.dart';
 
 part 'auth_event.dart';
@@ -7,6 +8,8 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthUsecase authUsecase;
+
+  final SecureStorage storage = SecureStorage();
 
   AuthBloc(
     this.authUsecase,
@@ -38,11 +41,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (l) => emit(
         AuthFailed(l.message!),
       ),
-      (r) => emit(
-        AuthDone(
-          token: r.token,
-        ),
-      ),
+      (r) {
+        storage.write("token", r.token);
+        emit(
+          AuthDone(
+            token: r.token,
+          ),
+        );
+      },
     );
   }
 
@@ -60,12 +66,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (l) => emit(
         AuthFailed(l.message!),
       ),
-      (r) => emit(
-        AuthDone(
-          token: r.token,
-          id: r.id,
-        ),
-      ),
+      (r) {
+        storage.write("token", r.token);
+        emit(
+          AuthDone(
+            token: r.token,
+            id: r.id,
+          ),
+        );
+      },
     );
   }
 }
