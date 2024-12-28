@@ -1,22 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_manager/features/task/presentation/bloc/task_bloc.dart';
 
-class SearchTaskWidget extends StatefulWidget {
-  const SearchTaskWidget({super.key});
+class SearchTaskWidget extends StatelessWidget {
+  const SearchTaskWidget(
+      {super.key, required this.onChanged, required this.queryController});
 
-  @override
-  State<SearchTaskWidget> createState() => _SearchTaskWidgetState();
-}
-
-class _SearchTaskWidgetState extends State<SearchTaskWidget> {
-  final TextEditingController queryController = TextEditingController();
-
-  @override
-  void dispose() {
-    queryController.dispose();
-    super.dispose();
-  }
+  final Function(String) onChanged;
+  final TextEditingController queryController;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +16,7 @@ class _SearchTaskWidgetState extends State<SearchTaskWidget> {
           hintText: 'Search tasks...',
           prefixIcon: Icon(Icons.search),
         ),
-        onChanged: (query) {
-          context.read<TaskBloc>().add(SearchTasksEvent(query));
-        },
+        onChanged: onChanged,
       ),
     );
   }

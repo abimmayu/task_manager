@@ -18,20 +18,13 @@ class AddTaskEvent extends TaskEvent {
 
 class FetchTasksEvent extends TaskEvent {}
 
-class SearchTasksEvent extends TaskEvent {
-  final String query;
-  const SearchTasksEvent(this.query);
+class SearchAndFilterTasksEvent extends TaskEvent {
+  final String? query;
+  final String? status;
+  const SearchAndFilterTasksEvent({this.query, this.status});
 
   @override
-  List<Object?> get props => [query];
-}
-
-class FilterTasksEvent extends TaskEvent {
-  final TaskStatus status;
-  const FilterTasksEvent(this.status);
-
-  @override
-  List<Object?> get props => [status];
+  List<Object?> get props => [query, status];
 }
 
 class UpdateTaskEvent extends TaskEvent {
@@ -58,4 +51,15 @@ class SyncTasksEvent extends TaskEvent {
 
   @override
   List<Object?> get props => [serverUrl];
+}
+
+class ScheduleNotificationEvent extends TaskEvent {
+  final int id;
+  final String title;
+  final String body;
+  final DateTime dueDate;
+  const ScheduleNotificationEvent(this.id, this.title, this.body, this.dueDate);
+
+  @override
+  List<Object?> get props => [id, title, body, dueDate];
 }

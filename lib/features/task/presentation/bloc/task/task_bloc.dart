@@ -13,12 +13,12 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   TaskBloc(this.taskUsecase) : super(TaskInitial()) {
     on<FetchTasksEvent>(_fetchTasks);
     on<FetchUnsyncedTasksEvent>(_fetchUnsyncedTasks);
-    on<SearchTasksEvent>(_searchTasks);
-    on<FilterTasksEvent>(_filterTasks);
+    on<SearchAndFilterTasksEvent>(_searchAndFilterTasks);
     on<AddTaskEvent>(_addTask);
     on<UpdateTaskEvent>(_updateTask);
     on<DeleteTaskEvent>(_deleteTask);
     on<SyncTasksEvent>(_syncTasks);
+    on<ScheduleNotificationEvent>(_scheduleNotification);
   }
 
   Future<void> _fetchTasks(
@@ -26,6 +26,21 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     emit(TaskLoading());
 
     final response = await taskUsecase.fetchTasks();
+
+    response.fold(
+      (l) => emit(TaskError(l.message!)),
+      (r) => emit(TaskLoaded(r)),
+    );
+  }
+
+  Future<void> _searchAndFilterTasks(
+      SearchAndFilterTasksEvent event, Emitter<TaskState> emit) async {
+    emit(TaskLoading());
+
+    final response = await taskUsecase.searchAndFilterTasks(
+      query: event.query,
+      status: event.status,
+    );
 
     response.fold(
       (l) => emit(TaskError(l.message!)),
@@ -45,36 +60,16 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     );
   }
 
-  Future<void> _searchTasks(
-      SearchTasksEvent event, Emitter<TaskState> emit) async {
-    emit(TaskLoading());
-
-    final response = await taskUsecase.searchTasks(event.query);
-
-    response.fold(
-      (l) => emit(TaskError(l.message!)),
-      (r) => emit(TaskLoaded(r)),
-    );
-  }
-
-  Future<void> _filterTasks(
-      FilterTasksEvent event, Emitter<TaskState> emit) async {
-    emit(TaskLoading());
-
-    final response = await taskUsecase.filterTasks(event.status);
-    response.fold(
-      (l) => emit(TaskError(l.message!)),
-      (r) => emit(TaskLoaded(r)),
-    );
-  }
-
   Future<void> _addTask(AddTaskEvent event, Emitter<TaskState> emit) async {
     emit(TaskLoading());
 
     final response = await taskUsecase.createTask(event.task);
     response.fold(
       (l) => emit(TaskError(l.message!)),
-      (r) => emit(TaskCreated()),
+      (r) {
+        emit(TaskCreated());
+        add(FetchTasksEvent());
+      },
     );
   }
 
@@ -85,7 +80,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final response = await taskUsecase.updateTask(event.task);
     response.fold(
       (l) => emit(TaskError(l.message!)),
-      (r) => emit(TaskUpdated()),
+      (r) {
+        emit(TaskUpdated());
+        add(FetchTasksEvent());
+      },
     );
   }
 
@@ -96,7 +94,10 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final response = await taskUsecase.deleteTask(event.id);
     response.fold(
       (l) => emit(TaskError(l.message!)),
-      (r) => emit(TaskDeleted()),
+      (r) {
+        emit(TaskDeleted());
+        add(FetchTasksEvent());
+      },
     );
   }
 
@@ -106,7 +107,32 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     final response = await taskUsecase.syncTasks(event.serverUrl);
     response.fold(
       (l) => emit(TaskError(l.message!)),
-      (r) => emit(TaskSynced()),
+      (r) {
+        emit(TaskSynced());
+        add(FetchTasksEvent());
+      },
+    );
+  }
+
+  Future<void> _scheduleNotification(
+    ScheduleNotificationEvent event,
+    Emitter<TaskState> emit,
+  ) async {
+    emit(TaskLoading());
+
+    final response = await taskUsecase.scheduleNotification(
+      event.id,
+      event.title,
+      event.body,
+      event.dueDate,
+    );
+
+    response.fold(
+      (l) => emit(TaskError(l.message!)),
+      (r) {
+        emit(TaskNotificationScheduled());
+        add(FetchTasksEvent());
+      },
     );
   }
 }

@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_manager/core/route/route.dart';
 import 'package:task_manager/core/utils/depedency_injection.dart' as di;
 import 'package:task_manager/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:task_manager/features/auth/presentation/bloc/splash/splash_bloc.dart';
-import 'package:task_manager/features/task/presentation/bloc/task_bloc.dart';
+import 'package:task_manager/features/task/presentation/bloc/task/task_bloc.dart';
 
 void main() async {
   await di.init();
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  tz.initializeTimeZones();
+
+  final localNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const initSettings = InitializationSettings(android: androidInit);
+
+  await localNotificationsPlugin.initialize(initSettings);
 
   runApp(const MyApp());
 }
@@ -16,7 +29,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(

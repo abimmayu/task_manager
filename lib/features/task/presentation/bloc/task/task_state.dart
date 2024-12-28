@@ -38,3 +38,5 @@ class TaskDeleted extends TaskState {}
 class TaskAdded extends TaskState {}
 
 class TaskSynced extends TaskState {}
+
+class TaskNotificationScheduled extends TaskState {}

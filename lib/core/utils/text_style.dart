@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:task_manager/core/constant/color.dart';
 
@@ -19,23 +20,23 @@ class AppTextStyle {
 
   static final title = _baseStyle(
     fontWeight: FontWeight.w700,
-    fontSize: 24,
+    fontSize: 48.sp,
   );
 
   static final body = _baseStyle(
-    fontSize: 16,
+    fontSize: 24.sp,
   );
 
   static final tinyText = _baseStyle(
-    fontSize: 12,
+    fontSize: 20.sp,
   );
 
   static final subtitle = _baseStyle(
     fontWeight: FontWeight.w500,
-    fontSize: 18,
+    fontSize: 42.sp,
   );
 
   static final description = _baseStyle(
-    fontSize: 14,
+    fontSize: 24.sp,
   );
 }

@@ -1,8 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:task_manager/core/constant/assets.dart';
 import 'package:task_manager/core/route/route.dart';
 import 'package:task_manager/features/auth/presentation/bloc/splash/splash_bloc.dart';
@@ -22,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     context.read<SplashBloc>().add(SplashStarted());
+    requestNotificationPermission();
     super.initState();
   }
 
@@ -34,9 +34,13 @@ class _SplashScreenState extends State<SplashScreen> {
             const Duration(seconds: 2),
             () {
               if (state is SplashHaveInternet) {
-                navigateTo(context, AppRoute.loginScreen.name);
+                if (context.mounted) {
+                  navigateTo(context, AppRoute.loginScreen.name);
+                }
               } else {
-                navigateTo(context, AppRoute.homeScreen.name);
+                if (context.mounted) {
+                  navigateTo(context, AppRoute.homeScreen.name);
+                }
               }
             },
           );
@@ -49,5 +53,17 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+  }
+
+  void requestNotificationPermission() async {
+    PermissionStatus status = await Permission.notification.request();
+
+    if (status.isGranted) {
+      debugPrint('Izin notifikasi diberikan');
+    } else if (status.isDenied) {
+      debugPrint('Izin notifikasi ditolak');
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
+    }
   }
 }

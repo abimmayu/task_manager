@@ -34,3 +34,10 @@ class TaskSyncError extends Failure {
           title: "Task Sync Error!",
         );
 }
+
+class TaskNotificationError extends Failure {
+  TaskNotificationError({super.message})
+      : super(
+          title: "Task Notification Error!",
+        );
+}

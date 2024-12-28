@@ -14,11 +14,11 @@ class TaskUsecase {
   Future<Either<Failure, List<Tasks>>> fetchTasks() =>
       taskRepository.fetchTasks();
 
-  Future<Either<Failure, List<Tasks>>> searchTasks(String query) =>
-      taskRepository.searchTasks(query);
-
-  Future<Either<Failure, List<Tasks>>> filterTasks(TaskStatus status) =>
-      taskRepository.filterTasks(status);
+  Future<Either<Failure, List<Tasks>>> searchAndFilterTasks({
+    String? query,
+    String? status,
+  }) =>
+      taskRepository.searchAndFilterTasks(query: query, status: status);
 
   Future<Either<Failure, int>> updateTask(Tasks task) =>
       taskRepository.updateTask(task);
@@ -31,4 +31,8 @@ class TaskUsecase {
 
   Future<Either<Failure, void>> syncTasks(String serverUrl) =>
       taskRepository.syncTasks(serverUrl);
+
+  Future<Either<Failure, void>> scheduleNotification(
+          int id, String title, String body, DateTime dueDate) =>
+      taskRepository.scheduleNotification(id, title, body, dueDate);
 }

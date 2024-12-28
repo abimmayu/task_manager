@@ -35,21 +35,11 @@ class TaskRepositoryImpl implements TaskRepository {
   }
 
   @override
-  Future<Either<Failure, List<Tasks>>> searchTasks(String query) async {
+  Future<Either<Failure, List<Tasks>>> searchAndFilterTasks(
+      {String? query, String? status}) async {
     try {
-      final response = await taskDatasource.searchTasks(query);
-      return Right(response);
-    } on Exception catch (e) {
-      return Left(
-        TaskReadError(message: e.toString()),
-      );
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<Tasks>>> filterTasks(TaskStatus status) async {
-    try {
-      final response = await taskDatasource.filterTasks(status);
+      final response = await taskDatasource.searchAndFilterTasks(
+          query: query, status: status);
       return Right(response);
     } on Exception catch (e) {
       return Left(
@@ -102,6 +92,19 @@ class TaskRepositoryImpl implements TaskRepository {
     } on Exception catch (e) {
       return Left(
         TaskSyncError(message: e.toString()),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> scheduleNotification(
+      int id, String title, String body, DateTime dueDate) async {
+    try {
+      await taskDatasource.scheduleNotification(id, title, body, dueDate);
+      return const Right(null);
+    } on Exception catch (e) {
+      return Left(
+        TaskNotificationError(message: e.toString()),
       );
     }
   }

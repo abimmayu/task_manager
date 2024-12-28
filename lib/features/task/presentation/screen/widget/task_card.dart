@@ -11,6 +11,7 @@ class TaskCard extends StatelessWidget {
     required this.status,
     required this.onEdit,
     required this.onDelete,
+    required this.onNotification,
   });
 
   final String title;
@@ -18,6 +19,7 @@ class TaskCard extends StatelessWidget {
   final String status;
   final Function() onDelete;
   final Function() onEdit;
+  final Function() onNotification;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class TaskCard extends StatelessWidget {
           color: AppColor.primaryColor,
         ),
         width: double.infinity,
-        height: 400.h,
+        height: 450.h,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,16 +42,29 @@ class TaskCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  title,
-                  style: AppTextStyle.title.copyWith(
-                    color: AppColor.backgroundColor,
+                Flexible(
+                  child: SizedBox(
+                    width: 300.w,
+                    child: Text(
+                      title,
+                      style: AppTextStyle.title.copyWith(
+                        color: AppColor.backgroundColor,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
-                Text(
-                  dueDate,
-                  style: AppTextStyle.subtitle.copyWith(
-                    color: AppColor.backgroundColor,
+                SizedBox(
+                  width: 200.w,
+                  child: Text(
+                    dueDate,
+                    style: AppTextStyle.subtitle.copyWith(
+                      color: AppColor.backgroundColor,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
                   ),
                 ),
               ],
@@ -65,6 +80,13 @@ class TaskCard extends StatelessWidget {
                 ),
                 Row(
                   children: [
+                    IconButton(
+                      onPressed: onNotification,
+                      icon: const Icon(
+                        Icons.notifications,
+                        color: AppColor.yellowAccent,
+                      ),
+                    ),
                     IconButton(
                       onPressed: onEdit,
                       icon: const Icon(

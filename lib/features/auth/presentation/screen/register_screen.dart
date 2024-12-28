@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_manager/core/constant/assets.dart';
 import 'package:task_manager/core/route/route.dart';
+import 'package:task_manager/core/widget/button.dart';
+import 'package:task_manager/core/widget/button_loading.dart';
 import 'package:task_manager/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:task_manager/features/auth/presentation/screen/widget/text_form.dart';
 
@@ -18,6 +20,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  bool obsecureStatus = true;
 
   @override
   void dispose() {
@@ -50,30 +54,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
               height: 35.h,
             ),
             TextFormWidget(
+              onVisibility: () {
+                setState(() {
+                  obsecureStatus = !obsecureStatus;
+                });
+              },
               prefixIcon: Icons.password,
               controller: passwordController,
-              obsecureStatus: true,
+              obsecureStatus: obsecureStatus,
               hintText: "Password",
             ),
             SizedBox(
               height: 35.h,
             ),
             BlocConsumer<AuthBloc, AuthState>(
-              listener: (BuildContext context, AuthState state) {},
+              listener: (context, state) {
+                if (state is AuthDone) {
+                  context.goNamed(AppRoute.homeScreen.name);
+                }
+              },
               builder: (context, state) {
                 if (state is AuthLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const ButtonLoading();
                 } else {
-                  return ElevatedButton(
-                    onPressed: () => context.read<AuthBloc>().add(
+                  return ButtonFilled(
+                    onTap: () => context.read<AuthBloc>().add(
                           AuthRegister(
                             email: emailController.text,
                             password: passwordController.text,
                           ),
                         ),
-                    child: const Text("Register"),
+                    hintText: "Register",
                   );
                 }
               },

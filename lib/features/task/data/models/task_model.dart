@@ -21,7 +21,7 @@ class Tasks {
       'title': title,
       'description': description,
       'dueDate': dueDate.toIso8601String(),
-      'status': status.index,
+      'status': status.name,
     };
   }
 
@@ -31,7 +31,8 @@ class Tasks {
       title: map['title'],
       description: map['description'],
       dueDate: DateTime.parse(map['dueDate']),
-      status: TaskStatus.values[map['status']],
+      status:
+          TaskStatus.values.where((tasks) => tasks.name == map['status']).first,
     );
   }
 }

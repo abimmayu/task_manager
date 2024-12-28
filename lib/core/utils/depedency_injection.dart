@@ -6,16 +6,22 @@ import 'package:task_manager/features/auth/domain/usecases/auth_usecases.dart';
 import 'package:task_manager/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:task_manager/features/auth/presentation/bloc/splash/splash_bloc.dart';
 import 'package:task_manager/features/task/data/datasource/task_datasource.dart';
+import 'package:task_manager/features/task/data/datasource/theme_datasource.dart';
 import 'package:task_manager/features/task/data/repository/task_repository_impl.dart';
+import 'package:task_manager/features/task/data/repository/theme_repository_imp.dart';
 import 'package:task_manager/features/task/domain/repository/task_repository.dart';
+import 'package:task_manager/features/task/domain/repository/theme_repository.dart';
 import 'package:task_manager/features/task/domain/usecases/task_usecase.dart';
-import 'package:task_manager/features/task/presentation/bloc/task_bloc.dart';
+import 'package:task_manager/features/task/domain/usecases/theme_usecase.dart';
+import 'package:task_manager/features/task/presentation/bloc/task/task_bloc.dart';
+import 'package:task_manager/features/task/presentation/bloc/theme/theme_bloc.dart';
 
 final GetIt sl = GetIt.instance;
 
 init() async {
   await _auth();
   await _tasks();
+  await _theme();
 }
 
 Future<void> _auth() async {
@@ -70,6 +76,36 @@ Future<void> _tasks() async {
   // Bloc
   sl.registerFactory(
     () => TaskBloc(
+      sl(),
+    ),
+  );
+}
+
+Future<void> _theme() async {
+  // Datasource
+  sl.registerLazySingleton<ThemeLocalDataSource>(
+    () => ThemeLocalDataSourceImpl(
+      sl(),
+    ),
+  );
+
+  // Repository
+  sl.registerLazySingleton<ThemeRepository>(
+    () => ThemeRepositoryImpl(
+      sl(),
+    ),
+  );
+
+  // Usecase
+  sl.registerLazySingleton<ToggleThemeUseCase>(
+    () => ToggleThemeUseCase(
+      sl(),
+    ),
+  );
+
+  // Bloc
+  sl.registerFactory(
+    () => ThemeCubit(
       sl(),
     ),
   );

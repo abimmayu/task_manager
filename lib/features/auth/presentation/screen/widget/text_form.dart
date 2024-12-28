@@ -8,11 +8,13 @@ class TextFormWidget extends StatelessWidget {
     required this.controller,
     required this.hintText,
     this.obsecureStatus,
+    this.onVisibility,
   });
   final IconData prefixIcon;
   final TextEditingController controller;
   final String hintText;
   final bool? obsecureStatus;
+  final Function()? onVisibility;
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +29,15 @@ class TextFormWidget extends StatelessWidget {
         ),
         suffixIcon: obsecureStatus != null
             ? obsecureStatus == true
-                ? const InkWell(
-                    child: Icon(
+                ? InkWell(
+                    onTap: onVisibility,
+                    child: const Icon(
                       Icons.visibility,
                     ),
                   )
-                : const InkWell(
-                    child: Icon(
+                : InkWell(
+                    onTap: onVisibility,
+                    child: const Icon(
                       Icons.visibility_off,
                     ),
                   )

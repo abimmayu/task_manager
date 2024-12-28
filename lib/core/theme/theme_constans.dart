@@ -1,0 +1,1 @@
+const String kThemePreferenceKey = 'isDarkMode';

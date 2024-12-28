@@ -1,6 +1,7 @@
-import 'dart:convert';
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:task_manager/features/task/data/models/task_model.dart';
 
@@ -48,37 +49,52 @@ class TaskDatabase {
   Future<List<Tasks>> fetchTasks() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('tasks');
-    return maps.map((map) => Tasks.fromMap(map)).toList();
+    return maps.map((map) {
+      log("data $map");
+      return Tasks.fromMap(map);
+    }).toList();
   }
 
-  Future<List<Tasks>> searchTasks(String query) async {
+  Future<List<Tasks>> searchAndFilterTasks(
+      {String? query, String? status}) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'tasks',
-      where: 'title LIKE ?',
-      whereArgs: ['%$query%'],
-    );
-    return maps.map((map) => Tasks.fromMap(map)).toList();
-  }
+    String whereClause = '';
+    List<String> whereArgs = [];
 
-  Future<List<Tasks>> filterTasks(TaskStatus status) async {
-    final db = await database;
+    if (query != null && query.isNotEmpty) {
+      whereClause += 'title LIKE ?';
+      whereArgs.add('%$query%');
+    }
+
+    if (status != null) {
+      if (whereClause.isNotEmpty) whereClause += ' AND ';
+      whereClause += 'status = ?';
+      whereArgs.add(status);
+    }
+
     final List<Map<String, dynamic>> maps = await db.query(
       'tasks',
-      where: 'status = ?',
-      whereArgs: [status.name],
+      where: whereClause.isNotEmpty ? whereClause : null,
+      whereArgs: whereArgs.isNotEmpty ? whereArgs : null,
     );
-    return maps.map((map) => Tasks.fromMap(map)).toList();
+
+    return maps.map((map) {
+      log("data $map");
+      return Tasks.fromMap(map);
+    }).toList();
   }
 
   Future<int> updateTask(Tasks task) async {
     final db = await database;
-    return await db.update(
+    log("Task Update: ${task.toMap()}");
+    final response = await db.update(
       'tasks',
       task.toMap(),
       where: 'id = ?',
       whereArgs: [task.id],
     );
+    log("update data: $response");
+    return response;
   }
 
   Future<int> deleteTask(int id) async {

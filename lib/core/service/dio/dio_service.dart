@@ -1,9 +1,6 @@
-import 'dart:developer' as dev;
-
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 
-// Singleton Dio instance
 final Dio _dio = Dio(BaseOptions(
   connectTimeout: const Duration(seconds: 10),
   receiveTimeout: const Duration(seconds: 10),

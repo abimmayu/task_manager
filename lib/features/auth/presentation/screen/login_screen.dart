@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_manager/core/constant/assets.dart';
 import 'package:task_manager/core/route/route.dart';
+import 'package:task_manager/core/widget/button.dart';
 import 'package:task_manager/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:task_manager/features/auth/presentation/screen/widget/text_form.dart';
 
@@ -20,6 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  bool obsecureStatus = true;
+
   @override
   void dispose() {
     emailController.dispose();
@@ -29,7 +30,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final blocController = context.read<AuthBloc>();
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 50.w),
@@ -54,9 +54,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 35.h,
               ),
               TextFormWidget(
+                onVisibility: () {
+                  setState(() {
+                    obsecureStatus = !obsecureStatus;
+                  });
+                },
                 prefixIcon: Icons.password,
                 controller: passwordController,
-                obsecureStatus: true,
+                obsecureStatus: obsecureStatus,
                 hintText: "Password",
               ),
               SizedBox(
@@ -77,16 +82,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     );
                   } else {
-                    return ElevatedButton(
-                      onPressed: () {
-                        blocController.add(
-                          AuthLogin(
-                            email: emailController.text,
-                            password: passwordController.text,
+                    return ButtonFilled(
+                      onTap: () => context.read<AuthBloc>().add(
+                            AuthLogin(
+                              email: emailController.text,
+                              password: passwordController.text,
+                            ),
                           ),
-                        );
-                      },
-                      child: const Text("Login"),
+                      hintText: "Login",
                     );
                   }
                 },
